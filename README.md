@@ -3,31 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mars Landing Video</title>
 
-  <title>Mars Landing: Watch Now</title>
-
-  <!-- Open Graph Meta Tags -->
+  <!-- Open Graph metadata for SMS and social previews -->
   <meta property="og:title" content="Watch NASA's Mars Landing Video!" />
-  <meta property="og:description" content="See the amazing footage of Perseverance landing on Mars. Tap to play!" />
+  <meta property="og:description" content="Incredible footage of the Perseverance rover landing on Mars. Tap to watch." />
   <meta property="og:image" content="https://mars.nasa.gov/layout/mars2020/images/PIA24430-RoverDeck-Mars.jpg" />
-  <meta property="og:type" content="video.other" />
-  <meta property="og:url" content="https://example.com/video-preview.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourusername.github.io/video-preview/" />
 
-  <!-- YouTube-hosted video -->
-  <meta property="og:video" content="https://www.youtube.com/embed/4czjS9h4Fpg" />
-  <meta property="og:video:secure_url" content="https://www.youtube.com/embed/4czjS9h4Fpg" />
-  <meta property="og:video:type" content="text/html" />
-  <meta property="og:video:width" content="640" />
-  <meta property="og:video:height" content="360" />
+  <!-- Twitter card (fallback for other preview systems) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Watch NASA's Mars Landing Video!" />
+  <meta name="twitter:description" content="Incredible footage of the Perseverance rover landing on Mars." />
+  <meta name="twitter:image" content="https://mars.nasa.gov/layout/mars2020/images/PIA24430-RoverDeck-Mars.jpg" />
 </head>
-<body style="text-align: center; font-family: sans-serif; padding: 2rem;">
+<body style="text-align: center; font-family: Arial, sans-serif; margin: 2rem;">
   <h1>Mars Landing Video</h1>
-  <iframe width="90%" height="315" 
-    src="https://www.youtube.com/embed/4czjS9h4Fpg" 
-    title="NASA's Mars Landing" 
-    frameborder="0" 
-    allowfullscreen>
-  </iframe>
-  <p>NASA’s Perseverance rover lands on Mars – incredible footage!</p>
+  <iframe
+    width="100%"
+    height="315"
+    src="https://www.youtube.com/embed/4czjS9h4Fpg"
+    title="NASA Perseverance Rover Landing"
+    frameborder="0"
+    allowfullscreen
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  ></iframe>
+  <p>See the amazing footage of the rover touching down on the red planet.</p>
 </body>
 </html>
