@@ -4,9 +4,14 @@
 Reads credentials from environment variables so nothing sensitive is
 hardcoded or committed:
 
-    INFOBIP_BASE_URL   e.g. nd2vj2.api.infobip.com
-    INFOBIP_API_KEY    your Infobip API key
-    INFOBIP_FROM       your long number, international format, no '+' (e.g. 447860004919)
+    INFOBIP_BASE_URL       e.g. nd2vj2.api.infobip.com
+    INFOBIP_API_KEY        your Infobip API key
+    INFOBIP_FROM           your long number, international format, no '+' (e.g. 447860004919)
+    INFOBIP_ENTITY_ID      optional; binds the send to a specific Entity so
+                           the platform routes through your number instead
+                           of a shared/generic one
+    INFOBIP_APPLICATION_ID optional; binds the send to a specific Application
+                           (used together with INFOBIP_ENTITY_ID)
 
 Usage:
     python infobip_sms.py balance
@@ -25,6 +30,8 @@ def get_config():
     base_url = os.environ.get("INFOBIP_BASE_URL")
     api_key = os.environ.get("INFOBIP_API_KEY")
     from_number = os.environ.get("INFOBIP_FROM")
+    entity_id = os.environ.get("INFOBIP_ENTITY_ID")
+    application_id = os.environ.get("INFOBIP_APPLICATION_ID")
 
     missing = [
         name
@@ -37,7 +44,7 @@ def get_config():
     if missing:
         sys.exit(f"Missing required environment variable(s): {', '.join(missing)}")
 
-    return base_url, api_key, from_number
+    return base_url, api_key, from_number, entity_id, application_id
 
 
 def headers(api_key, json_body=False):
@@ -65,18 +72,19 @@ def number_info(base_url, api_key, number):
     print(resp.text)
 
 
-def send(base_url, api_key, from_number, to, text):
+def send(base_url, api_key, from_number, to, text, entity_id=None, application_id=None):
     if not from_number:
         sys.exit("INFOBIP_FROM is not set; required to send a message.")
-    payload = {
-        "messages": [
-            {
-                "from": from_number,
-                "destinations": [{"to": to}],
-                "text": text,
-            }
-        ]
+    message = {
+        "from": from_number,
+        "destinations": [{"to": to}],
+        "text": text,
     }
+    if entity_id:
+        message["entityId"] = entity_id
+    if application_id:
+        message["applicationId"] = application_id
+    payload = {"messages": [message]}
     resp = requests.post(
         f"https://{base_url}/sms/2/text/advanced",
         json=payload,
@@ -108,14 +116,14 @@ def main():
     sub.add_parser("inbox", help="Poll for inbound message reports")
 
     args = parser.parse_args()
-    base_url, api_key, from_number = get_config()
+    base_url, api_key, from_number, entity_id, application_id = get_config()
 
     if args.command == "balance":
         balance(base_url, api_key)
     elif args.command == "number":
         number_info(base_url, api_key, from_number)
     elif args.command == "send":
-        send(base_url, api_key, from_number, args.to, args.text)
+        send(base_url, api_key, from_number, args.to, args.text, entity_id, application_id)
     elif args.command == "inbox":
         inbox(base_url, api_key)
 
