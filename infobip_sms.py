@@ -93,6 +93,16 @@ def send(base_url, api_key, from_number, to, text, entity_id=None, application_i
     print(resp.status_code)
     print(resp.text)
 
+    try:
+        sent_messages = resp.json().get("messages", [])
+    except ValueError:
+        sent_messages = []
+    for m in sent_messages:
+        message_id = m.get("messageId")
+        status = m.get("status", {})
+        if message_id:
+            print(f"\nmessageId: {message_id}  status: {status.get('groupName')}/{status.get('name')}")
+
 
 def inbox(base_url, api_key):
     resp = requests.get(
